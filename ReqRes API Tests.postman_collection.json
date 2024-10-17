@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "9e73e544-5113-4b06-b265-38bd2f71bf9b",
+		"name": "ReqRes API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20414904"
+	},
+	"item": [
+		{
+			"name": "Get List User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test case: Check if the response status is 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test case: Check if the response is in JSON format\r",
+							"pm.test(\"Response is in JSON format\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"// Test case: Validate the structure of the response body\r",
+							"pm.test(\"Response has correct structure\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"page\");\r",
+							"    pm.expect(jsonData).to.have.property(\"per_page\");\r",
+							"    pm.expect(jsonData).to.have.property(\"total\");\r",
+							"    pm.expect(jsonData).to.have.property(\"total_pages\");\r",
+							"    pm.expect(jsonData).to.have.property(\"data\").that.is.an('array');\r",
+							"});\r",
+							"\r",
+							"// Test case: Validate data properties in the response\r",
+							"pm.test(\"Data array contains users with expected properties\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    jsonData.data.forEach(user => {\r",
+							"        pm.expect(user).to.have.property(\"id\");\r",
+							"        pm.expect(user).to.have.property(\"email\");\r",
+							"        pm.expect(user).to.have.property(\"first_name\");\r",
+							"        pm.expect(user).to.have.property(\"last_name\");\r",
+							"        pm.expect(user).to.have.property(\"avatar\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"// Test case: Validate pagination values\r",
+							"pm.test(\"Pagination values are correct\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.page).to.equal(2);\r",
+							"    pm.expect(jsonData.per_page).to.equal(6); // Based on the response structure\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
